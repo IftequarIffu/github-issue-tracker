@@ -1,9 +1,7 @@
 import React, { FC } from "react";
 import prisma from "@/prisma/client";
 import { notFound } from "next/navigation";
-import { Card, Flex, Heading, Text, Grid, Button, Box } from "@radix-ui/themes";
-import {Pencil2Icon} from '@radix-ui/react-icons'
-import Link from "next/link";
+import {  Grid, Box } from "@radix-ui/themes";
 import EditIssueButton from "./EditIssueButton";
 import IssueDetails from "./IssueDetails";
 
