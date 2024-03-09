@@ -2,20 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/prisma/client";
 import { z } from 'zod'
 
-interface Props {
-    params: {
-        issueId: number
-    }
-}
-
 const updateIssueSchema = z.object({
     title: z.string().min(1).max(255),
     description: z.string().min(1).max(255)
 })
 
 
-
-export const GET = async(request:NextRequest, { params }: Props) => {
+// Because URL parameters are strings by default
+export const GET = async(request:NextRequest, { params }: { params: {issueId: string}}) => {
 
     const issue = await prisma.issue.findUnique({
         where: {
@@ -26,16 +20,26 @@ export const GET = async(request:NextRequest, { params }: Props) => {
     return NextResponse.json(issue)
 }
 
-export const PUT = async(request: NextRequest, { params }: Props) => {
+export const PUT = async(request: NextRequest, { params }: { params: {issueId: string}}) => {
 
     const body =  await request.json()
     const validation = updateIssueSchema.safeParse(body)
     if(!validation.success){
         NextResponse.json(validation.error.errors, { status: 400 })
     }
-    const issue = await prisma.issue.update({
+    const issue = await prisma.issue.findUnique({
         where: {
-            id: Number(params.issueId)
+            id: parseInt(params.issueId)
+        }
+    })
+
+    if(!issue){
+        return NextResponse.json({error: "Invalid Issue"}, {status: 404})
+    }
+
+    const updatedIssue = await prisma.issue.update({
+        where: {
+            id: issue.id
         },
         data: {
             title: body.title,
@@ -43,5 +47,5 @@ export const PUT = async(request: NextRequest, { params }: Props) => {
         }
     })
 
-    return NextResponse.json(issue, {status: 200})
+    return NextResponse.json(updatedIssue, {status: 200})
 }
