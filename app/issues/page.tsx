@@ -40,4 +40,13 @@ const IssuesPage = async () => {
   );
 };
 
+// URLs with parameters are rendered dynamically(at run-time) by the server. But, no the URLs with no parameters.
+// This is for dynamic rendering(This page will not be cached)(server-side)
+// We don't want this page to be cached as new issues are created constantly and
+// we want to render this page freshly all the time.
+// You can use either of the following lines(Both mean the same thing)
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+
 export default IssuesPage;

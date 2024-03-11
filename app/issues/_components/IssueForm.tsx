@@ -47,6 +47,10 @@ const IssueForm = ({issue}: {issue?: Issue}) => {
             const response = await axios.post("/api/issues", data);
           }
           router.push("/issues");
+
+          // The below line is used to avoid client-side caching.
+          // It refreshes the current route(sends another request to the server and fetches data)
+          router.refresh()
         } catch (e) {
           setIsSubmitting(false)
           setError("Some unexpected error occured");
