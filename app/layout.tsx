@@ -5,6 +5,7 @@ import './globals.css'
 import Navbar from './Navbar'
 import { Theme, ThemePanel } from '@radix-ui/themes';
 import './theme-config.css'
+import { Container } from '@radix-ui/themes';
 
 const inter = Inter(
   { 
@@ -29,7 +30,9 @@ export default function RootLayout({
         <Theme appearance="light" accentColor="violet">
           <Navbar />
             <main className='p-5'>
-              {children}
+              <Container>
+                {children}
+              </Container>
             </main>
           </Theme>
       </body>
