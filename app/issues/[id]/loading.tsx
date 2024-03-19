@@ -10,7 +10,7 @@ const loading: FC = async () => {
       <Heading><Skeleton /></Heading>
         <Skeleton />
         <Card className="mt-5">
-            <Skeleton />
+            <Skeleton count={10}/>
         </Card>
     </div>
   );
