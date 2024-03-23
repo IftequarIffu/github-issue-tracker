@@ -8,10 +8,10 @@ interface Props{
 
 const IssueStatusBadge: FC<Props> = ({status}) => {
     if(status === 'CLOSED'){
-        return <Badge color="red">{status}</Badge>
+        return <Badge color="green">{status}</Badge>
     }
     else if(status === 'OPEN'){
-        return <Badge color="green">{status}</Badge>
+        return <Badge color="red">{status}</Badge>
     }
     else{
         return <Badge color="purple">{status}</Badge>
