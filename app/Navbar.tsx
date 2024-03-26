@@ -6,7 +6,7 @@ import React from "react";
 import { AiFillBug } from "react-icons/ai";
 import { usePathname } from "next/navigation";
 import classnames from "classnames";
-import { Container, Flex, Box } from "@radix-ui/themes";
+import { Container, Flex, Box, DropdownMenu, Avatar, Text } from "@radix-ui/themes";
 import { useSession } from "next-auth/react";
 
 const Navbar = () => {
@@ -22,6 +22,7 @@ const Navbar = () => {
   return (
     <nav className="flex border-b mb-5 px-5 h-14 items-center">
       <Container>
+        <Flex justify="between">
         <Flex gap="6" align="center">
         <Link href="/">
           <AiFillBug />
@@ -40,13 +41,29 @@ const Navbar = () => {
             </li>
           ))}
         </ul>
-        <Box className="ms-auto">
-              { status === "authenticated" && (<Link href="/api/auth/signout">Logout</Link>)}
+        </Flex>
+        <Box>
+              { status === "authenticated" && (
+                <DropdownMenu.Root>
+                  <DropdownMenu.Trigger>
+                    <Avatar src={session.user!.image!} fallback="?" size="2" radius="full" className="cursor-pointer"/>
+                  </DropdownMenu.Trigger>
+                  <DropdownMenu.Content>
+                    <DropdownMenu.Label>
+                      <Text size="2">
+                      {session.user!.email}
+                      </Text>
+                    </DropdownMenu.Label>
+                    <DropdownMenu.Item>
+                    <Link href="/api/auth/signout">Logout</Link>
+                    </DropdownMenu.Item>
+                  </DropdownMenu.Content>
+                </DropdownMenu.Root>
+              // <Link href="/api/auth/signout">Logout</Link>
+              )}
               { status === "unauthenticated" && (<Link href="/api/auth/signin">Login</Link>)}
         </Box>
         </Flex>
-
-
       </Container>
     </nav>
   );
