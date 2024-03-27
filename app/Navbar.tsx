@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import classnames from "classnames";
 import { Container, Flex, Box, DropdownMenu, Avatar, Text } from "@radix-ui/themes";
 import { useSession } from "next-auth/react";
+import {Skeleton} from "@/app/components";
 
 const Navbar = () => {
 
@@ -35,7 +36,7 @@ const AuthLinks = () => {
 
   const {status, data: session} = useSession()
   if(status === "loading"){
-    return null
+    return <Skeleton width="3rem" />
   }
 
   else if(status === "unauthenticated"){
