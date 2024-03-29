@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/prisma/client";
 import { z } from 'zod'
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/auth/authOptions";
 
 const updateIssueSchema = z.object({
     title: z.string().min(1).max(255),
@@ -21,6 +23,12 @@ export const GET = async(request:NextRequest, { params }: { params: {issueId: st
 }
 
 export const PUT = async(request: NextRequest, { params }: { params: {issueId: string}}) => {
+
+    const session = await getServerSession(authOptions)
+
+    if(!session){
+        return NextResponse.json({}, { status: 401 })
+    }
 
     const body =  await request.json()
     const validation = updateIssueSchema.safeParse(body)
@@ -51,6 +59,12 @@ export const PUT = async(request: NextRequest, { params }: { params: {issueId: s
 }
 
 export const DELETE = async(request: NextRequest, { params }: { params: {issueId: string}}) => {
+
+    const session = await getServerSession(authOptions)
+
+    if(!session){
+        return NextResponse.json({}, { status: 401 })
+    }
 
     const issue = await prisma.issue.findUnique({
         where: {

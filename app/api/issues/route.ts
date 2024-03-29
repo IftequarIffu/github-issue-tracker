@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/prisma/client";
 import { createIssueSchema } from "../../zodSchemas";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/auth/authOptions";
 
 export const GET = async (request: NextRequest) => {
   const issues = await prisma.issue.findMany();
@@ -8,6 +10,13 @@ export const GET = async (request: NextRequest) => {
 };
 
 export const POST = async (request: NextRequest) => {
+
+  const session = await getServerSession(authOptions)
+
+  if(!session){
+    return NextResponse.json({}, { status: 401 })
+  }
+
   const body = await request.json();
   const validation = createIssueSchema.safeParse(body);
   if (!validation.success) {
