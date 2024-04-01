@@ -1,14 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/prisma/client";
-import { z } from 'zod'
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/auth/authOptions";
-
-const updateIssueSchema = z.object({
-    title: z.string().min(1).max(255),
-    description: z.string().min(1).max(255)
-})
-
+import { createIssueSchema, patchIssueSchema } from "@/app/zodSchemas";
+import { Issue } from "@prisma/client";
 
 // Because URL parameters are strings by default
 export const GET = async(request:NextRequest, { params }: { params: {issueId: string}}) => {
@@ -31,10 +26,25 @@ export const PUT = async(request: NextRequest, { params }: { params: {issueId: s
     }
 
     const body =  await request.json()
-    const validation = updateIssueSchema.safeParse(body)
+    const validation = patchIssueSchema.safeParse(body)
     if(!validation.success){
-        NextResponse.json(validation.error.errors, { status: 400 })
+        return NextResponse.json(validation.error.errors, { status: 400 })
     }
+
+    const {title, description, assignedToUserId}: Issue = body
+    if(assignedToUserId){
+        const user = await prisma.user.findUnique({
+            where: {
+                id: assignedToUserId
+            }
+        })
+
+        if(!user){
+            return NextResponse.json({error: "Invalid User"}, { status: 400 })
+        }
+    }
+
+
     const issue = await prisma.issue.findUnique({
         where: {
             id: parseInt(params.issueId)
@@ -50,8 +60,9 @@ export const PUT = async(request: NextRequest, { params }: { params: {issueId: s
             id: issue.id
         },
         data: {
-            title: body.title,
-            description: body.description
+            title,
+            description,
+            assignedToUserId
         }
     })
 
