@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from 'react'
 import { Select } from '@radix-ui/themes'
 import axios from 'axios';
-import { User } from '@prisma/client';
+import { User, Issue } from '@prisma/client';
 
-const AssigneeSelect = () => {
+const AssigneeSelect = ({ issue }: { issue: Issue }) => {
 
     const [users, setUsers] = useState<User[] | null>(null)
 
@@ -29,16 +29,25 @@ const AssigneeSelect = () => {
 
 
   return (
-    <Select.Root>
+    <Select.Root defaultValue={issue.assignedToUserId || "null"} onValueChange={(userId) => {
+        try {
+            axios.put(`/api/issues/${issue.id}`, { assignedToUserId: userId !== "null" ? userId : null})
+        } catch (error) {
+            console.log(error)
+        }
+    }}>
         <Select.Trigger placeholder='Assign...'/>
         <Select.Content>
             <Select.Group>
                 <Select.Label>
                     Suggestions
                 </Select.Label>
+                <Select.Item value="null"> 
+                    Unassigned
+                </Select.Item>
                 {
                         users?.map((user) => (
-                            <Select.Item value='1' key={user.id}>{user.name}</Select.Item>
+                            <Select.Item value={user.id} key={user.id}>{user.name}</Select.Item>
                         ))
                 }
             </Select.Group>
