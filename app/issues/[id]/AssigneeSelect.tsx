@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Select } from '@radix-ui/themes'
 import axios from 'axios';
 import { User, Issue } from '@prisma/client';
+import toast, {Toaster} from 'react-hot-toast'
 
 const AssigneeSelect = ({ issue }: { issue: Issue }) => {
 
@@ -29,11 +30,14 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
 
 
   return (
-    <Select.Root defaultValue={issue.assignedToUserId || "null"} onValueChange={(userId) => {
+    <>
+    <Toaster />
+    <Select.Root defaultValue={issue.assignedToUserId || "null"} onValueChange={async (userId) => {
         try {
-            axios.put(`/api/issues/${issue.id}`, { assignedToUserId: userId !== "null" ? userId : null})
+            await axios.put(`/api/issues/${issue.id}`, { assignedToUserId: userId !== "null" ? userId : null})
+            toast.success("Assigned to user successfully")
         } catch (error) {
-            console.log(error)
+            toast.error("Changes couldn't be saved")
         }
     }}>
         <Select.Trigger placeholder='Assign...'/>
@@ -53,6 +57,7 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
             </Select.Group>
         </Select.Content>
     </Select.Root>
+    </>
   )
 }
 
