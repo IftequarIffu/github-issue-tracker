@@ -25,21 +25,21 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
         getUsers()
 
     }, [])
+
+    const assignIssues = async (userId: string) => {
+        try {
+            await axios.put(`/api/issues/${issue.id}`, { assignedToUserId: userId !== "null" ? userId : null})
+            toast.success("Changes made successfully")
+        } catch (error) {
+            toast.error("Changes couldn't be saved")
+        }
+    }
     
-
-
 
   return (
     <>
     <Toaster />
-    <Select.Root defaultValue={issue.assignedToUserId || "null"} onValueChange={async (userId) => {
-        try {
-            await axios.put(`/api/issues/${issue.id}`, { assignedToUserId: userId !== "null" ? userId : null})
-            toast.success("Assigned to user successfully")
-        } catch (error) {
-            toast.error("Changes couldn't be saved")
-        }
-    }}>
+    <Select.Root defaultValue={issue.assignedToUserId || "null"} onValueChange={assignIssues}>
         <Select.Trigger placeholder='Assign...'/>
         <Select.Content>
             <Select.Group>
