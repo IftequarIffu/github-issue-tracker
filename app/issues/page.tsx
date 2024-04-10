@@ -6,6 +6,7 @@ import IssueStatusFilter from "./_components/IssueStatusFilter";
 import { Issue, Status } from "@prisma/client";
 import NextLink from 'next/link'
 import { ArrowUpIcon } from "@radix-ui/react-icons";
+import Pagination from "../components/Pagination";
 
 interface Props {
   searchParams: { status: Status, orderBy: keyof Issue }
@@ -55,13 +56,6 @@ const IssuesPage = async ({ searchParams }: Props) => {
                 </Table.ColumnHeaderCell>
               ))
             }
-            {/* <Table.ColumnHeaderCell>Issue</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className="hidden md:table-cell">
-              Status
-            </Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className="hidden md:table-cell">
-              Created
-            </Table.ColumnHeaderCell> */}
           </Table.Row>
         </Table.Header>
         <Table.Body>
