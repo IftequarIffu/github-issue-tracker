@@ -1,9 +1,9 @@
 import React from 'react'
-import Pagination from './components/Pagination'
+import LatestIssues from './LatestIssues'
 
-const Home = ({ searchParams }: { searchParams : { page : string }}) => {
+const Home = () => {
   return (
-    <h1>Abcd</h1>
+    <LatestIssues />
   )
 }
 
