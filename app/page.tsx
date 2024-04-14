@@ -2,6 +2,7 @@ import React from 'react'
 import LatestIssues from './LatestIssues'
 import IssueSummary from './IssueSummary'
 import prisma from '@/prisma/client'
+import IssueChart from './IssueChart'
 
 const Home = async() => {
 
@@ -24,7 +25,8 @@ const Home = async() => {
   })
 
   return (
-    <IssueSummary open={open} inProgress={inProgress} closed={closed} />
+    <IssueChart  open={open} inProgress={inProgress} closed={closed} />
+
     )
 }
 
