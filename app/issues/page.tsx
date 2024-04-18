@@ -25,7 +25,6 @@ const IssuesPage = async ({ searchParams }: Props) => {
 
   const statuses = Object.values(Status)
   const status = statuses.includes(searchParams.status) ? searchParams.status : undefined
-  const where = { status }
 
   const orderBy = columns.map(column => column.value).includes(searchParams.orderBy) ? { [searchParams.orderBy]: 'asc'} : undefined
 
@@ -35,14 +34,18 @@ const IssuesPage = async ({ searchParams }: Props) => {
 
 
   const issues = await prisma.issue.findMany({
-    where,
+    where: {
+      status: status
+    },
     orderBy,
     skip: (page - 1) * pageSize,
     take: pageSize
   });
 
   const issueCount = await prisma.issue.count({
-    where
+    where: {
+      status: status
+    }
   })
 
   return (
@@ -93,7 +96,7 @@ const IssuesPage = async ({ searchParams }: Props) => {
   );
 };
 
-// URLs with parameters are rendered dynamically(at run-time) by the server. But, no the URLs with no parameters.
+// URLs with parameters are rendered dynamically(at run-time) by the server. But, not the URLs with no parameters.
 // This is for dynamic rendering(This page will not be cached)(server-side)
 // We don't want this page to be cached as new issues are created constantly and
 // we want to render this page freshly all the time.
