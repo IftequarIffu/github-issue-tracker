@@ -29,6 +29,6 @@ export const POST = async (request: NextRequest) => {
       description: body.description,
     },
   });
-
+  console.log(newIssue)
   return NextResponse.json({ newIssue }, { status: 201 });
 };
