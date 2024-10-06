@@ -9,6 +9,8 @@ import classnames from "classnames";
 import { Container, Flex, Box, DropdownMenu, Avatar, Text } from "@radix-ui/themes";
 import { useSession } from "next-auth/react";
 import {Skeleton} from "@/app/components";
+import SignInButton from "./components/SignInButton";
+import SignOutButton from "./components/SignOutButton";
 
 const Navbar = () => {
 
@@ -41,7 +43,8 @@ const AuthLinks = () => {
 
   else if(status === "unauthenticated"){
     return (<Box>
-              <Link href="/api/auth/signin">Login</Link>
+              {/* <Link href="/api/auth/signin">Login</Link> */}
+              <SignInButton />
             </Box>)
   }
 
@@ -58,7 +61,8 @@ const AuthLinks = () => {
             </Text>
           </DropdownMenu.Label>
           <DropdownMenu.Item>
-          <Link href="/api/auth/signout">Logout</Link>
+          {/* <Link href="/api/auth/signout">Logout</Link> */}
+          <SignOutButton />
           </DropdownMenu.Item>
         </DropdownMenu.Content>
       </DropdownMenu.Root>

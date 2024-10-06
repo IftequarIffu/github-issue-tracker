@@ -11,7 +11,22 @@ export const authOptions: NextAuthOptions = {
           clientSecret: process.env.GOOGLE_CLIENT_SECRET!
         })
     ],
-    session: {
-      strategy: 'jwt'
+    // session: {
+    //   strategy: 'jwt'
+    // },
+    callbacks: {
+      async jwt({token, account}) {
+        if (account) {
+          token.id = account.providerAccountId
+          token.accessToken = account.access_token
+        }
+        return token
+      },
+      async redirect({url, baseUrl}) {
+        // console.log('url', url);
+        // console.log('baseUrl', baseUrl);
+        
+        return url.startsWith(baseUrl) ? url : baseUrl + '/';
+      }
     }
   }
